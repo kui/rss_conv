@@ -1,5 +1,6 @@
 require "rss"
 require "pathname"
+require "time"
 
 class RssConv::Generator
 
@@ -35,6 +36,8 @@ class RssConv::Generator
 
   def convert_to_rss scraper, feed
     RSS::Maker.make RSS_VERSION do |maker|
+      maker.channel.pubDate = Time.now.rfc822
+
       [:title, :description, :link].each do |n|
         v = nil
         begin
