@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 
 require 'rss_conv'
+require 'rubygems'
 require 'mechanize'
 
 class AnimateTvRadio < RssConv::Scraper
   RADIO_URL = "http://www.animate.tv/radio/"
   TITLE = "アニメイト TV ウェブラジオ"
-  DESCRIPTION = ""
+  DESCRIPTION = "アニメの事ならアニメイトTV！声優/アニメニュース・アニメ動画・声優ラジオ・PV配信などアニメに関する情報が満載です！"
 
   attr_reader :title, :link, :description
 

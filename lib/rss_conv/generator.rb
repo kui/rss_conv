@@ -49,7 +49,6 @@ class RssConv::Generator
       feed.each do |i|
         rss_item = maker.items.new_item
         [:title, :link, :description].each do |n|
-          p n,i[n]
           rss_item.send "#{n}=", i[n]
         end
       end
