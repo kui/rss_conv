@@ -13,7 +13,12 @@ class RssConv::Generator
 
   def generate_all
     @scrapers.each do |scraper|
-      feed = scraper.scrape
+      feed =
+        begin
+          scraper.scrape
+        rescue => e
+          puts e
+        end
       if feed == nil
         puts "ignore #{scraper.class} (#scrape returned nil)"
         next
