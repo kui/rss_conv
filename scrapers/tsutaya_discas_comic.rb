@@ -5,7 +5,7 @@ require 'rubygems'
 require 'mechanize'
 
 class TsutayaDiscasComic < RssConv::Scraper
-  RADIO_URL = "http://www.discas.net/netdvd/topComic.do"
+  URL = "http://www.discas.net/netdvd/topComic.do"
   TITLE = "TSUTAYA DISCAS コミックレンタル"
   DESCRIPTION = TITLE
 
@@ -15,7 +15,7 @@ class TsutayaDiscasComic < RssConv::Scraper
 
   def initialize
     @title = TITLE
-    @link = RADIO_URL
+    @link = URL
     @description = DESCRIPTION
   end
 
