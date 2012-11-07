@@ -5,11 +5,11 @@ require 'rubygems'
 require 'mechanize'
 
 class TsutayaDiscasComic < RssConv::Scraper
-  URL = "http://www.discas.net/netdvd/topComic.do"
+  URL = "http://search.discas.net/netdvd/comic/searchComic.do?sk=1&pT=4&srt=7&kj=0&u=0&t=2&p=62&dm=2&pl=1&af=1&pn=1"
   TITLE = "TSUTAYA DISCAS コミックレンタル"
   DESCRIPTION = TITLE
 
-  MAX_PAGE = 10
+  MAX_PAGE = 6
 
   attr_reader :title, :link, :description
 
