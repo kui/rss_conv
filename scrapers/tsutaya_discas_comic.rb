@@ -4,7 +4,7 @@ require 'rss_conv'
 require 'rubygems'
 require 'mechanize'
 
-class OnsenAg < RssConv::Scraper
+class TsutayaDiscasComic < RssConv::Scraper
   RADIO_URL = "http://www.discas.net/netdvd/topComic.do"
   TITLE = "TSUTAYA DISCAS コミックレンタル"
   DESCRIPTION = TITLE
@@ -50,7 +50,7 @@ class OnsenAg < RssConv::Scraper
       title = i.search('a > span.tx01').first
       next nil if title == nil
 
-      genre = i.search('span.tx01 > a:first-child').first
+      genre = i.search('span.tx01 > a').first
       next nil if genre == nil
 
       { :title => title.content,
