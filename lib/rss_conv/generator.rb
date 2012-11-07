@@ -18,7 +18,7 @@ class RssConv::Generator
         next
       end
 
-      rss = convert_to_rss feed
+      rss = convert_to_rss scraper, feed
       if rss == nil
         puts "ignore #{scraper.class} (cannot generate rss)"
         next
@@ -33,16 +33,24 @@ class RssConv::Generator
 
   private
 
-  def convert_to_rss feed
+  def convert_to_rss scraper, feed
     RSS::Maker.make RSS_VERSION do |maker|
       [:title, :description, :link].each do |n|
-        maker.channel.send "#{n.to_s}=", feed[n]
+        v = nil
+        begin
+          v = scraper.send n
+        rescue NoMethodError => e
+          puts e
+          return nil
+        end
+        maker.channel.send "#{n}=", v
       end
 
-      feed[:items].each do |i|
+      feed.each do |i|
         rss_item = maker.items.new_item
         [:title, :link, :description].each do |n|
-          rss_item.send "#{n.to_s}=", i[n]
+          p n,i[n]
+          rss_item.send "#{n}=", i[n]
         end
       end
     end
