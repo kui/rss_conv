@@ -14,4 +14,7 @@ Gem::Specification.new do |gem|
   gem.name          = "rss_conv"
   gem.require_paths = ["lib"]
   gem.version       = RssConv::VERSION
+
+  gem.add_runtime_dependency 'mechanize'
+  gem.add_runtime_dependency 'nokogiri'
 end
