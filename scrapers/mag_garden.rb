@@ -3,6 +3,7 @@
 require 'rss_conv'
 require 'rubygems'
 require 'mechanize'
+require 'digest/md5'
 
 class MagGarden < RssConv::Scraper
   URL = "http://comic.mag-garden.co.jp/"
@@ -35,9 +36,11 @@ class MagGarden < RssConv::Scraper
       next nil if title.nil?
       title = title.content
 
-      { :title => title, :link => url, :description => main_box.to_html }
+      title_digest = '#' + Digest::MD5.hexdigest(title)
+
+      { :title => title, :link => (url + title_digest), :description => main_box.to_html }
     end.each.reject {|i| i.nil? }
   end
 
-  new.scrape if $0 == __FILE__
+  p new.scrape if $0 == __FILE__
 end
