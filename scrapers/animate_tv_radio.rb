@@ -3,6 +3,7 @@
 require 'rss_conv'
 require 'rubygems'
 require 'mechanize'
+require 'digest/md5'
 
 class AnimateTvRadio < RssConv::Scraper
   RADIO_URL = "http://www.animate.tv/radio/"
@@ -27,9 +28,11 @@ class AnimateTvRadio < RssConv::Scraper
         next nil
       end
 
+      title_digest = '#' + Digest::MD5.hexdigest(t)
+
       {
         :title => t.inner_text,
-        :link => t.attr('href'),
+        :link => t.attr('href') + title_digest,
         :description => r.to_html
       }
     end
