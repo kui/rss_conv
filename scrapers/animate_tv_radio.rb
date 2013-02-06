@@ -28,11 +28,11 @@ class AnimateTvRadio < RssConv::Scraper
         next nil
       end
 
-      title_digest = '#' + Digest::MD5.hexdigest(t)
+      digest = '#' + Digest::MD5.hexdigest(t.to_html)
 
       {
         :title => t.inner_text,
-        :link => t.attr('href') + title_digest,
+        :link => t.attr('href') + digest,
         :description => r.to_html
       }
     end
