@@ -1,10 +1,12 @@
 require "rss"
 require "pathname"
 require "time"
+require 'digest/md5'
 
 class RssConv::Generator
 
   RSS_VERSION = "2.0"
+  PROJECT_PAGE = "https://github.com/kui/rss_conv"
 
   def initialize
     @scrapers = get_scrapers
@@ -17,12 +19,9 @@ class RssConv::Generator
         begin
           scraper.scrape
         rescue => e
-          puts e
+          feed_for_err e, scraper
         end
-      if feed == nil
-        puts "ignore #{scraper.class} (#scrape returned nil)"
-        next
-      end
+      feed ||= feed_for_nil scraper
 
       rss = convert_to_rss scraper, feed
       if rss == nil
@@ -38,6 +37,16 @@ class RssConv::Generator
   end
 
   private
+
+  def feed_for_err err, scraper
+    h = "#%s%s%s" % [scraper.title, err.to_s, Time.now.to_s].map{|s| Digest::MD5.hexdigest(s)}
+    [{:title => err.class, :link => PROJECT_PAGE + h, :description => err.to_s }]
+  end
+
+  def feed_for_nil scraper
+    h = "#%s%s" % [scraper.title, Time.now.to_s].map{|s| Digest::MD5.hexdigest(s)}
+    [{:title => err.class, :link => PROJECT_PAGE + h, :description => err.to_s }]
+  end
 
   def convert_to_rss scraper, feed
     RSS::Maker.make RSS_VERSION do |maker|
