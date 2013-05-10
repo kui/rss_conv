@@ -5,7 +5,7 @@ require 'rubygems'
 require 'mechanize'
 
 class ComicHigh < RssConv::Scraper
-  URL = "http://comichigh.jp/webcomic.html"
+  URL = "http://webaction.jp/"
   TITLE = "WEB コミック ハイ！"
   DESCRIPTION = TITLE
 
@@ -21,31 +21,20 @@ class ComicHigh < RssConv::Scraper
     agent = Mechanize.new
     page = agent.get URL
 
-    page.search('.webcomic').to_a.each.map do |item|
+    webcomics = page.search('#topleft > article')
 
-      # title
-      id = item.attr 'id'
-      titles = item.search '.comictitle'
-      title =
-        if titles.length > 0 then titles.first.inner_html
-        elsif id then id
-        end
-      next nil if title.nil?
-
-      # link
-      link = nil
-      links = item.search '.comic_list_new a'
-      link =
-        if links.length > 0 then links.first.attr 'href'
-        elsif not id.nil? then "#{URL}\##{id}"
-        end
-      next nil if link.nil?
-
-      { :title => title, :link => link, :description => item.to_html}
-    end.each.reject do |item|
-      item == nil
+    date = webcomics.search('> .update')
+    title = if date.length.zero? then
+      raise "element not found: #topleft > article > .update"
+    else
+      "#{TITLE} #{date.first.content}"
     end
+
+    digest = Digest::MD5.hexdigest(webcomics.to_html)
+    link = "#{URL}##{digest}"
+
+    return [{ :title => title, :link => link, :description => webcomics.to_html}]
   end
 
-  new.scrape if $0 == __FILE__
+  p new.scrape if $0 == __FILE__
 end
