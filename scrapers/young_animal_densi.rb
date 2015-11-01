@@ -1,3 +1,5 @@
+# coding: utf-8
+
 # -*- coding: utf-8 -*-
 
 require 'rss_conv'
@@ -6,7 +8,7 @@ require 'mechanize'
 require 'digest/md5'
 
 class YoungAnimalDensi < RssConv::Scraper
-  URL = "http://younganimal-densi.com/index"
+  URL = "http://www.younganimal-densi.com/rensai"
   TITLE = "ヤングアニマル Densi"
   DESCRIPTION = "#{TITLE} 更新情報"
 
@@ -21,10 +23,10 @@ class YoungAnimalDensi < RssConv::Scraper
   def scrape
     agent = Mechanize.new
     page = agent.get URL
-    latest = page.search('#latest').first
+    latest = page.search('.item_area').first
     return nil if latest.nil?
 
-    date = page.search('.update_date').first
+    date = page.search('.date').first
     return nil if date.nil?
 
     digests = []
@@ -32,8 +34,9 @@ class YoungAnimalDensi < RssConv::Scraper
     digests << Digest::MD5.hexdigest(date.content)
     hash = "#%s%s" % digests
 
-    [{:title => date.content, :link => URL + hash,
-        :description => latest.to_html}]
+    [{ :title => date.content,
+       :link => URL + hash,
+       :description => latest.to_html }]
   end
 
   p new.scrape if $0 == __FILE__
