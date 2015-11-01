@@ -23,7 +23,7 @@ module RssConv::Cli
         child.basename.to_s == "scrapers"
       end
       scrapers_path.children.each do |child|
-        if not ( child.extname == ".rb" )
+        if child.extname != ".rb"
           next
         end
         puts "load #{child}"
